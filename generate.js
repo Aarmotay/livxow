@@ -52,22 +52,13 @@ async function generateM3U() {
         }
 
         console.log(`Events API returned ${eventsData.length} items.`);
-
         console.log(
             `Firebase returned ${Object.keys(streamsData).length} stream entries.`
         );
-
         console.log("");
 
         /*
-         * Event API format:
-         *
-         * date      = DD/MM/YYYY
-         * time      = HH:MM or HH:MM:SS
-         * end_date  = DD/MM/YYYY
-         * end_time  = HH:MM or HH:MM:SS
-         *
-         * Times are treated as UTC.
+         * Event API dates/times are treated as UTC.
          */
         function parseDateTime(dateString, timeString) {
             if (!dateString || !timeString) {
@@ -124,15 +115,15 @@ async function generateM3U() {
         }
 
         /*
-         * More flexible slug extraction.
+         * Extract the Firebase slug from the event's links field.
          *
-         * Supported examples:
+         * Example:
          *
-         * https://example.com/pro/test.txt
-         * /pro/test.txt
-         * pro/test.txt
+         * pro/ABC123.txt
          *
-         * Also handles URLs with query strings.
+         * becomes:
+         *
+         * ABC123
          */
         function getSlug(event) {
             if (!event || !event.links) {
@@ -149,16 +140,342 @@ async function generateM3U() {
                 return match[1].trim();
             }
 
-            /*
-             * Fallback:
-             * Search anywhere inside the links value.
-             */
             const fallback = links.match(
                 /\/pro\/([^/?#]+?)(?:\.txt)?(?:[?#]|$)/i
             );
 
             if (fallback && fallback[1]) {
                 return fallback[1].trim();
+            }
+
+            return null;
+        }
+
+        /*
+         * Decode a Firebase key.
+         *
+         * The stream database keys are Base64 encoded.
+         *
+         * Example:
+         *
+         * Q09OQ0FDQUYgTmF0aW9ucyBMZWFndWUt...
+         *
+         * becomes something similar to:
+         *
+         * CONCACAF Nations League-Bahamas-vs-Saint Martin1790052310382
+         */
+        function decodeBase64(value) {
+            if (!value) {
+                return null;
+            }
+
+            try {
+                return Buffer.from(
+                    String(value),
+                    "base64"
+                ).toString("utf8");
+            } catch {
+                return null;
+            }
+        }
+
+        /*
+         * Remove the generated timestamp at the end of decoded
+         * Firebase event identifiers.
+         *
+         * Example:
+         *
+         * CONCACAF Nations League-Bahamas-vs-Saint Martin1790052310382
+         *
+         * becomes:
+         *
+         * CONCACAF Nations League-Bahamas-vs-Saint Martin
+         */
+        function removeTrailingTimestamp(value) {
+            if (!value) {
+                return "";
+            }
+
+            return String(value)
+                .replace(/\d{8,}$/, "")
+                .trim();
+        }
+
+        /*
+         * Normalize text so that small differences in:
+         *
+         * - capitalization
+         * - punctuation
+         * - spaces
+         * - hyphens
+         *
+         * don't prevent matching.
+         */
+        function normalizeText(value) {
+            return String(value || "")
+                .toLowerCase()
+                .normalize("NFKD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/&/g, " and ")
+                .replace(/[^a-z0-9]+/g, " ")
+                .replace(/\s+/g, " ")
+                .trim();
+        }
+
+        /*
+         * Convert an event into several searchable strings.
+         *
+         * We intentionally use multiple forms because the event API
+         * and Firebase may format the same match differently.
+         */
+        function getEventMatchStrings(event) {
+            const eventName =
+                event.eventName || "";
+
+            const teamA =
+                event.teamAName || "";
+
+            const teamB =
+                event.teamBName || "";
+
+            const fullName =
+                `${eventName} ${teamA} ${teamB}`;
+
+            const teams =
+                `${teamA} ${teamB}`;
+
+            const matchup =
+                `${teamA} vs ${teamB}`;
+
+            const reverseMatchup =
+                `${teamB} vs ${teamA}`;
+
+            return {
+                eventName: normalizeText(eventName),
+                teams: normalizeText(teams),
+                matchup: normalizeText(matchup),
+                reverseMatchup: normalizeText(reverseMatchup),
+                full: normalizeText(fullName)
+            };
+        }
+
+        /*
+         * Get a useful representation of a Firebase key.
+         */
+        function decodeFirebaseKey(key) {
+            const decoded = decodeBase64(key);
+
+            if (!decoded) {
+                return null;
+            }
+
+            const withoutTimestamp =
+                removeTrailingTimestamp(decoded);
+
+            return {
+                key,
+                decoded,
+                normalized: normalizeText(withoutTimestamp)
+            };
+        }
+
+        /*
+         * Build a decoded Firebase-key index once.
+         *
+         * This is much faster than decoding every Firebase key
+         * repeatedly for every event.
+         */
+        const firebaseIndex = [];
+
+        for (const key of Object.keys(streamsData)) {
+            const decoded = decodeFirebaseKey(key);
+
+            if (!decoded) {
+                continue;
+            }
+
+            firebaseIndex.push(decoded);
+        }
+
+        console.log(
+            `Decoded ${firebaseIndex.length} Firebase keys for fallback matching.`
+        );
+
+        /*
+         * Find a Firebase stream entry for an event.
+         *
+         * Matching order:
+         *
+         * 1. Exact slug.
+         * 2. Exact normalized decoded Firebase event name.
+         * 3. Team matchup contained inside decoded key.
+         * 4. Both team names contained inside decoded key.
+         */
+        function findStreamEntry(event) {
+            const slug = getSlug(event);
+
+            /*
+             * ----------------------------------------
+             * METHOD 1: EXACT SLUG MATCH
+             * ----------------------------------------
+             */
+            if (
+                slug &&
+                streamsData[slug] &&
+                Array.isArray(streamsData[slug].streams)
+            ) {
+                return {
+                    data: streamsData[slug],
+                    key: slug,
+                    method: "exact slug"
+                };
+            }
+
+            /*
+             * ----------------------------------------
+             * METHOD 2+: FALLBACK DECODED MATCH
+             * ----------------------------------------
+             */
+            const matchStrings =
+                getEventMatchStrings(event);
+
+            /*
+             * Don't attempt a broad fallback when there
+             * aren't team names or an event name.
+             */
+            if (
+                !matchStrings.eventName &&
+                !matchStrings.teams
+            ) {
+                return null;
+            }
+
+            /*
+             * First try to identify both teams.
+             */
+            if (
+                matchStrings.eventName &&
+                event.teamAName &&
+                event.teamBName
+            ) {
+                const teamA =
+                    normalizeText(event.teamAName);
+
+                const teamB =
+                    normalizeText(event.teamBName);
+
+                const teamMatch =
+                    firebaseIndex.filter(entry => {
+                        return (
+                            entry.normalized.includes(teamA) &&
+                            entry.normalized.includes(teamB)
+                        );
+                    });
+
+                if (teamMatch.length === 1) {
+                    const found = teamMatch[0];
+
+                    if (
+                        streamsData[found.key] &&
+                        Array.isArray(
+                            streamsData[found.key].streams
+                        )
+                    ) {
+                        return {
+                            data: streamsData[found.key],
+                            key: found.key,
+                            decodedKey: found.decoded,
+                            method: "fallback team match"
+                        };
+                    }
+                }
+
+                /*
+                 * If multiple results exist, prefer one whose
+                 * decoded key also contains the event name/category.
+                 */
+                if (teamMatch.length > 1) {
+                    const eventName =
+                        matchStrings.eventName;
+
+                    const betterMatches =
+                        teamMatch.filter(entry =>
+                            entry.normalized.includes(eventName)
+                        );
+
+                    if (betterMatches.length === 1) {
+                        const found = betterMatches[0];
+
+                        if (
+                            streamsData[found.key] &&
+                            Array.isArray(
+                                streamsData[found.key].streams
+                            )
+                        ) {
+                            return {
+                                data: streamsData[found.key],
+                                key: found.key,
+                                decodedKey: found.decoded,
+                                method: "fallback team + event match"
+                            };
+                        }
+                    }
+                }
+            }
+
+            /*
+             * ----------------------------------------
+             * METHOD 3: NORMALIZED FULL EVENT MATCH
+             * ----------------------------------------
+             */
+            const normalizedCandidates =
+                firebaseIndex.filter(entry => {
+
+                    if (
+                        matchStrings.full &&
+                        entry.normalized === matchStrings.full
+                    ) {
+                        return true;
+                    }
+
+                    if (
+                        matchStrings.matchup &&
+                        entry.normalized.includes(
+                            matchStrings.matchup
+                        )
+                    ) {
+                        return true;
+                    }
+
+                    if (
+                        matchStrings.reverseMatchup &&
+                        entry.normalized.includes(
+                            matchStrings.reverseMatchup
+                        )
+                    ) {
+                        return true;
+                    }
+
+                    return false;
+                });
+
+            if (normalizedCandidates.length === 1) {
+                const found =
+                    normalizedCandidates[0];
+
+                if (
+                    streamsData[found.key] &&
+                    Array.isArray(
+                        streamsData[found.key].streams
+                    )
+                ) {
+                    return {
+                        data: streamsData[found.key],
+                        key: found.key,
+                        decodedKey: found.decoded,
+                        method: "fallback normalized match"
+                    };
+                }
             }
 
             return null;
@@ -171,27 +488,26 @@ async function generateM3U() {
                 .trim();
         }
 
-        /*
-         * Current time.
-         */
         const now = new Date();
 
-        /*
-         * Only include events beginning within the next 24 hours.
-         */
-        const upcomingLimit = new Date(
-            now.getTime() +
-            24 * 60 * 60 * 1000
+        const upcomingLimit =
+            new Date(
+                now.getTime() +
+                24 * 60 * 60 * 1000
+            );
+
+        console.log(
+            `Current UTC time: ${now.toISOString()}`
         );
 
-        console.log(`Current UTC time: ${now.toISOString()}`);
         console.log(
             `24-hour cutoff: ${upcomingLimit.toISOString()}`
         );
+
         console.log("");
 
         /*
-         * Start a completely fresh playlist.
+         * Always create a fresh playlist.
          */
         let m3u =
             `#EXTM3U\n\n` +
@@ -208,38 +524,37 @@ async function generateM3U() {
         let futureEvents = 0;
         let missingStreams = 0;
         let generatedStreams = 0;
+        let fallbackMatches = 0;
 
         let debugMatchFound = false;
 
         /*
-         * Process every event from the API.
+         * Process events.
          */
         for (const item of eventsData) {
 
             /*
-             * IMPORTANT:
-             *
-             * The API may return:
+             * Support both:
              *
              * { event: {...} }
              *
-             * OR:
+             * and:
              *
              * {...}
-             *
-             * The old code only supported the first format.
              */
-            const event = item?.event || item;
+            const event =
+                item?.event || item;
 
-            if (!event || typeof event !== "object") {
+            if (
+                !event ||
+                typeof event !== "object"
+            ) {
                 skippedInvalidItem++;
 
                 console.log(
-                    "Skipping invalid event item:"
+                    "Skipping invalid event item:",
+                    item
                 );
-
-                console.log(item);
-                console.log("");
 
                 continue;
             }
@@ -251,20 +566,17 @@ async function generateM3U() {
                 `${event.teamAName || ""} vs ${event.teamBName || ""}`.trim() ||
                 "Unknown Event";
 
-            const teamA =
-                String(event.teamAName || "").toLowerCase();
-
-            const teamB =
-                String(event.teamBName || "").toLowerCase();
-
             const nameLower =
                 String(eventName).toLowerCase();
 
-            /*
-             * DEBUG:
-             *
-             * Look specifically for Bahamas / Saint Martin.
-             */
+            const teamA =
+                String(event.teamAName || "")
+                    .toLowerCase();
+
+            const teamB =
+                String(event.teamBName || "")
+                    .toLowerCase();
+
             const isBahamasSaintMartin =
                 (
                     nameLower.includes("bahamas") &&
@@ -284,7 +596,9 @@ async function generateM3U() {
 
                 console.log("");
                 console.log("================================");
-                console.log("DEBUG: BAHAMAS vs SAINT MARTIN FOUND");
+                console.log(
+                    "DEBUG: BAHAMAS vs SAINT MARTIN FOUND"
+                );
                 console.log("================================");
 
                 console.log(
@@ -323,26 +637,13 @@ async function generateM3U() {
                 );
 
                 console.log(
-                    "Visible:",
-                    event.visible
-                );
-
-                console.log(
                     "Links:",
                     event.links
                 );
 
                 console.log(
-                    "Extracted slug:",
+                    "Original slug:",
                     getSlug(event)
-                );
-
-                console.log(
-                    "Available Firebase keys containing Bahamas/Saint:",
-                    Object.keys(streamsData).filter(key =>
-                        key.toLowerCase().includes("bahamas") ||
-                        key.toLowerCase().includes("saint")
-                    )
                 );
 
                 console.log("================================");
@@ -350,26 +651,26 @@ async function generateM3U() {
             }
 
             /*
-             * Skip events explicitly marked invisible.
+             * Skip hidden events.
              */
             if (event.visible === false) {
                 skippedHidden++;
 
                 if (isBahamasSaintMartin) {
                     console.log(
-                        "DEBUG RESULT: Bahamas vs Saint Martin was skipped because visible === false"
+                        "DEBUG RESULT: Event is hidden."
                     );
                 }
 
                 continue;
             }
 
-            const start = getEventStart(event);
-            const end = getEventEnd(event);
+            const start =
+                getEventStart(event);
 
-            /*
-             * Invalid date/time.
-             */
+            const end =
+                getEventEnd(event);
+
             if (!start || !end) {
                 invalidEvents++;
 
@@ -379,16 +680,13 @@ async function generateM3U() {
 
                 if (isBahamasSaintMartin) {
                     console.log(
-                        "DEBUG RESULT: Bahamas vs Saint Martin has invalid date/time."
+                        "DEBUG RESULT: Invalid date/time."
                     );
                 }
 
                 continue;
             }
 
-            /*
-             * Show parsed dates for the target match.
-             */
             if (isBahamasSaintMartin) {
                 console.log(
                     "Parsed start:",
@@ -407,7 +705,7 @@ async function generateM3U() {
             }
 
             /*
-             * EVENT HAS ENDED
+             * Remove events whose end time has passed.
              */
             if (end <= now) {
                 expiredEvents++;
@@ -418,11 +716,7 @@ async function generateM3U() {
 
                 if (isBahamasSaintMartin) {
                     console.log(
-                        "DEBUG RESULT: Bahamas vs Saint Martin was classified as EXPIRED."
-                    );
-
-                    console.log(
-                        `End ${end.toISOString()} <= Now ${now.toISOString()}`
+                        "DEBUG RESULT: Event is expired."
                     );
                 }
 
@@ -430,7 +724,7 @@ async function generateM3U() {
             }
 
             /*
-             * EVENT IS TOO FAR IN THE FUTURE
+             * Do not include events more than 24 hours away.
              */
             if (start > upcomingLimit) {
                 futureEvents++;
@@ -441,7 +735,7 @@ async function generateM3U() {
 
                 if (isBahamasSaintMartin) {
                     console.log(
-                        "DEBUG RESULT: Bahamas vs Saint Martin was classified as MORE THAN 24 HOURS AWAY."
+                        "DEBUG RESULT: Event is more than 24 hours away."
                     );
                 }
 
@@ -449,32 +743,12 @@ async function generateM3U() {
             }
 
             /*
-             * Find matching stream database entry.
+             * Find stream data using exact or fallback matching.
              */
-            const slug = getSlug(event);
+            const streamMatch =
+                findStreamEntry(event);
 
-            if (!slug) {
-                missingStreams++;
-
-                console.log(
-                    `No slug found for: ${eventName}`
-                );
-
-                console.log(
-                    "Links:",
-                    event.links
-                );
-
-                if (isBahamasSaintMartin) {
-                    console.log(
-                        "DEBUG RESULT: Bahamas vs Saint Martin has NO SLUG."
-                    );
-                }
-
-                continue;
-            }
-
-            if (!streamsData[slug]) {
+            if (!streamMatch) {
                 missingStreams++;
 
                 console.log(
@@ -483,73 +757,117 @@ async function generateM3U() {
 
                 console.log(
                     "Slug:",
-                    slug
+                    getSlug(event)
                 );
 
                 if (isBahamasSaintMartin) {
+                    console.log("");
                     console.log(
-                        "DEBUG RESULT: Bahamas vs Saint Martin slug does NOT exist in Firebase."
+                        "DEBUG RESULT: No Firebase match found, even after fallback matching."
                     );
 
                     console.log(
-                        "Slug searched for:",
-                        slug
+                        "Decoded Firebase candidates containing team names:"
                     );
+
+                    const teamAName =
+                        normalizeText(
+                            event.teamAName
+                        );
+
+                    const teamBName =
+                        normalizeText(
+                            event.teamBName
+                        );
+
+                    const candidates =
+                        firebaseIndex.filter(entry =>
+                            (
+                                teamAName &&
+                                entry.normalized.includes(
+                                    teamAName
+                                )
+                            ) ||
+                            (
+                                teamBName &&
+                                entry.normalized.includes(
+                                    teamBName
+                                )
+                            )
+                        );
+
+                    for (
+                        const candidate of candidates.slice(0, 10)
+                    ) {
+                        console.log(
+                            candidate.decoded
+                        );
+                    }
+
+                    console.log("");
                 }
 
                 continue;
             }
 
-            if (!Array.isArray(streamsData[slug].streams)) {
-                missingStreams++;
+            const streamsEntry =
+                streamMatch.data;
+
+            /*
+             * Report fallback matches.
+             */
+            if (
+                streamMatch.method !==
+                "exact slug"
+            ) {
+                fallbackMatches++;
 
                 console.log(
-                    `Firebase entry has no streams array for: ${eventName}`
+                    `Fallback Firebase match: ${eventName}`
                 );
 
                 console.log(
-                    "Slug:",
-                    slug
+                    `Match method: ${streamMatch.method}`
                 );
 
-                if (isBahamasSaintMartin) {
-                    console.log(
-                        "DEBUG RESULT: Bahamas vs Saint Martin Firebase entry exists, but streams is not an array."
-                    );
+                console.log(
+                    `Firebase key: ${streamMatch.key}`
+                );
 
-                    console.log(
-                        "Firebase entry:",
-                        JSON.stringify(
-                            streamsData[slug],
-                            null,
-                            2
-                        )
-                    );
-                }
-
-                continue;
+                console.log(
+                    `Decoded key: ${streamMatch.decodedKey}`
+                );
             }
 
             /*
-             * If we reached here, the target event passed
-             * every filtering step.
+             * Target-match diagnostics.
              */
             if (isBahamasSaintMartin) {
                 console.log("");
                 console.log("================================");
                 console.log(
-                    "DEBUG RESULT: BAHAMAS vs SAINT MARTIN PASSED ALL FILTERS"
+                    "DEBUG RESULT: BAHAMAS vs SAINT MARTIN MATCHED"
                 );
                 console.log("================================");
 
                 console.log(
-                    "Firebase slug:",
-                    slug
+                    "Match method:",
+                    streamMatch.method
+                );
+
+                console.log(
+                    "Firebase key:",
+                    streamMatch.key
+                );
+
+                console.log(
+                    "Decoded Firebase key:",
+                    streamMatch.decodedKey
                 );
 
                 console.log(
                     "Number of streams:",
-                    streamsData[slug].streams.length
+                    streamsEntry.streams.length
                 );
 
                 console.log("================================");
@@ -560,14 +878,20 @@ async function generateM3U() {
              * Event metadata.
              */
             const category =
-                event.category || "Live Sports";
+                event.category ||
+                "Live Sports";
 
             const logo =
-                event.eventLogo || "";
+                event.eventLogo ||
+                "";
 
-            let matchTitle = eventName;
+            let matchTitle =
+                eventName;
 
-            if (event.teamAName && event.teamBName) {
+            if (
+                event.teamAName &&
+                event.teamBName
+            ) {
                 matchTitle +=
                     ` (${event.teamAName} vs ${event.teamBName})`;
             }
@@ -576,16 +900,18 @@ async function generateM3U() {
                 `${category}: ${matchTitle}`;
 
             /*
-             * Add every available stream for this event.
+             * Add all streams.
              */
-            for (const stream of streamsData[slug].streams) {
-
+            for (
+                const stream of streamsEntry.streams
+            ) {
                 if (!stream) {
                     continue;
                 }
 
                 const streamName =
-                    stream.name || "Live Stream";
+                    stream.name ||
+                    "Live Stream";
 
                 const linkTag =
                     stream.linkTag
@@ -593,19 +919,24 @@ async function generateM3U() {
                         : "";
 
                 let streamUrl =
-                    stream.link || "";
+                    stream.link ||
+                    "";
 
                 const drmKey =
-                    stream.api || "";
+                    stream.api ||
+                    "";
 
                 /*
-                 * Ignore empty/placeholder stream URLs.
+                 * Ignore empty placeholder URLs.
                  */
                 if (
                     !streamUrl ||
-                    streamUrl === "https://no.link"
+                    streamUrl ===
+                    "https://no.link"
                 ) {
-                    if (isBahamasSaintMartin) {
+                    if (
+                        isBahamasSaintMartin
+                    ) {
                         console.log(
                             "DEBUG: Target match has an empty/placeholder stream URL."
                         );
@@ -615,41 +946,52 @@ async function generateM3U() {
                 }
 
                 /*
-                 * Normalize headers after "|".
+                 * Normalize stream headers.
                  */
                 let streamHeaders = "";
 
-                if (streamUrl.includes("|")) {
-
-                    let [url, headers] =
-                        streamUrl.split("|", 2);
-
-                    headers = headers
-                        .replace(
-                            /user-agent=/gi,
-                            "User-Agent="
-                        )
-                        .replace(
-                            /referer=/gi,
-                            "Referer="
-                        )
-                        .replace(
-                            /origin=/gi,
-                            "Origin="
-                        )
-                        .replace(
-                            /cookie=/gi,
-                            "Cookie="
+                if (
+                    streamUrl.includes("|")
+                ) {
+                    let [
+                        url,
+                        headers
+                    ] =
+                        streamUrl.split(
+                            "|",
+                            2
                         );
 
-                    streamUrl =
-                        url + "|" + headers;
+                    headers =
+                        headers
+                            .replace(
+                                /user-agent=/gi,
+                                "User-Agent="
+                            )
+                            .replace(
+                                /referer=/gi,
+                                "Referer="
+                            )
+                            .replace(
+                                /origin=/gi,
+                                "Origin="
+                            )
+                            .replace(
+                                /cookie=/gi,
+                                "Cookie="
+                            );
 
-                    streamHeaders = headers;
+                    streamUrl =
+                        url +
+                        "|" +
+                        headers;
+
+                    streamHeaders =
+                        headers;
                 }
 
                 /*
-                 * M3U event entry.
+                 * M3U entry.
                  */
                 m3u +=
                     `#EXTINF:-1 ` +
@@ -681,7 +1023,9 @@ async function generateM3U() {
 
                 generatedStreams++;
 
-                if (isBahamasSaintMartin) {
+                if (
+                    isBahamasSaintMartin
+                ) {
                     console.log(
                         "DEBUG: Added target stream:",
                         streamName
@@ -691,8 +1035,7 @@ async function generateM3U() {
         }
 
         /*
-         * If the target match was never encountered at all,
-         * this tells us the API did not return it in the expected form.
+         * Tell us if the target event wasn't in the API.
          */
         if (!debugMatchFound) {
             console.log("");
@@ -701,23 +1044,11 @@ async function generateM3U() {
                 "DEBUG RESULT: BAHAMAS vs SAINT MARTIN WAS NOT FOUND IN API RESPONSE"
             );
             console.log("================================");
-
-            console.log(
-                "The generator processed:",
-                totalEvents,
-                "events."
-            );
-
-            console.log(
-                "This means the event API response did not contain a recognizable Bahamas vs Saint Martin event."
-            );
-
-            console.log("================================");
             console.log("");
         }
 
         /*
-         * ALWAYS overwrite playlist.m3u.
+         * Always overwrite the playlist.
          */
         fs.writeFileSync(
             "playlist.m3u",
@@ -727,11 +1058,13 @@ async function generateM3U() {
 
         console.log("");
         console.log("================================");
-        console.log("Playlist successfully generated");
+        console.log(
+            "Playlist successfully generated"
+        );
         console.log("================================");
 
         console.log(
-            `Total valid API events processed: ${totalEvents}`
+            `Total API events: ${totalEvents}`
         );
 
         console.log(
@@ -759,6 +1092,10 @@ async function generateM3U() {
         );
 
         console.log(
+            `Fallback Firebase matches: ${fallbackMatches}`
+        );
+
+        console.log(
             `Streams generated: ${generatedStreams}`
         );
 
@@ -773,7 +1110,6 @@ async function generateM3U() {
         console.log("================================");
 
     } catch (error) {
-
         console.error("");
         console.error(
             "ERROR: Failed to generate M3U playlist."
