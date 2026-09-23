@@ -16,9 +16,13 @@ async function generateM3U() {
             }
         };
 
+        console.log("================================");
+        console.log("Starting M3U generation");
+        console.log("================================");
+        console.log("");
+
         console.log("Fetching event and stream data...");
 
-        // Fetch both sources at the same time.
         const [eventsRes, streamsRes] = await Promise.all([
             fetch(eventsUrl, fetchOptions),
             fetch(streamsUrl, fetchOptions)
@@ -47,6 +51,14 @@ async function generateM3U() {
             throw new Error("Streams API returned invalid data.");
         }
 
+        console.log(`Events API returned ${eventsData.length} items.`);
+
+        console.log(
+            `Firebase returned ${Object.keys(streamsData).length} stream entries.`
+        );
+
+        console.log("");
+
         /*
          * Event API format:
          *
@@ -55,13 +67,7 @@ async function generateM3U() {
          * end_date  = DD/MM/YYYY
          * end_time  = HH:MM or HH:MM:SS
          *
-         * The event API times are treated as UTC.
-         *
-         * Example:
-         * 23/09/2026 + 20:00:00
-         *
-         * becomes:
-         * 2026-09-23T20:00:00Z
+         * Times are treated as UTC.
          */
         function parseDateTime(dateString, timeString) {
             if (!dateString || !timeString) {
@@ -118,22 +124,44 @@ async function generateM3U() {
         }
 
         /*
-         * Existing event link format:
+         * More flexible slug extraction.
          *
-         * .../pro/<slug>.txt
+         * Supported examples:
+         *
+         * https://example.com/pro/test.txt
+         * /pro/test.txt
+         * pro/test.txt
+         *
+         * Also handles URLs with query strings.
          */
         function getSlug(event) {
-            if (!event.links) {
+            if (!event || !event.links) {
                 return null;
             }
 
-            const match = String(event.links).match(
-                /pro\/(.*?)\.txt/
+            const links = String(event.links).trim();
+
+            const match = links.match(
+                /(?:^|\/)pro\/([^/?#]+?)(?:\.txt)?(?:[?#].*)?$/i
             );
 
-            return match && match[1]
-                ? match[1]
-                : null;
+            if (match && match[1]) {
+                return match[1].trim();
+            }
+
+            /*
+             * Fallback:
+             * Search anywhere inside the links value.
+             */
+            const fallback = links.match(
+                /\/pro\/([^/?#]+?)(?:\.txt)?(?:[?#]|$)/i
+            );
+
+            if (fallback && fallback[1]) {
+                return fallback[1].trim();
+            }
+
+            return null;
         }
 
         function escapeM3U(value) {
@@ -144,27 +172,26 @@ async function generateM3U() {
         }
 
         /*
-         * Capture the current time ONCE.
-         *
-         * Date#getTime() is UTC-based, so this can be compared
-         * directly with the UTC dates produced above.
+         * Current time.
          */
         const now = new Date();
 
         /*
-         * Only include events that start within the next 24 hours.
+         * Only include events beginning within the next 24 hours.
          */
         const upcomingLimit = new Date(
             now.getTime() +
             24 * 60 * 60 * 1000
         );
 
+        console.log(`Current UTC time: ${now.toISOString()}`);
+        console.log(
+            `24-hour cutoff: ${upcomingLimit.toISOString()}`
+        );
+        console.log("");
+
         /*
          * Start a completely fresh playlist.
-         *
-         * The previous playlist is NOT read.
-         * Therefore old events cannot remain simply because they
-         * existed in yesterday's playlist.
          */
         let m3u =
             `#EXTM3U\n\n` +
@@ -174,6 +201,7 @@ async function generateM3U() {
             `https://raw.githubusercontent.com/aiorbd-video/video/refs/heads/main/Allinonesocialvid/output.m3u8\n\n`;
 
         let totalEvents = 0;
+        let skippedInvalidItem = 0;
         let skippedHidden = 0;
         let invalidEvents = 0;
         let expiredEvents = 0;
@@ -181,23 +209,158 @@ async function generateM3U() {
         let missingStreams = 0;
         let generatedStreams = 0;
 
+        let debugMatchFound = false;
+
         /*
          * Process every event from the API.
          */
         for (const item of eventsData) {
-            const event = item?.event;
 
-            if (!event) {
+            /*
+             * IMPORTANT:
+             *
+             * The API may return:
+             *
+             * { event: {...} }
+             *
+             * OR:
+             *
+             * {...}
+             *
+             * The old code only supported the first format.
+             */
+            const event = item?.event || item;
+
+            if (!event || typeof event !== "object") {
+                skippedInvalidItem++;
+
+                console.log(
+                    "Skipping invalid event item:"
+                );
+
+                console.log(item);
+                console.log("");
+
                 continue;
             }
 
             totalEvents++;
+
+            const eventName =
+                event.eventName ||
+                `${event.teamAName || ""} vs ${event.teamBName || ""}`.trim() ||
+                "Unknown Event";
+
+            const teamA =
+                String(event.teamAName || "").toLowerCase();
+
+            const teamB =
+                String(event.teamBName || "").toLowerCase();
+
+            const nameLower =
+                String(eventName).toLowerCase();
+
+            /*
+             * DEBUG:
+             *
+             * Look specifically for Bahamas / Saint Martin.
+             */
+            const isBahamasSaintMartin =
+                (
+                    nameLower.includes("bahamas") &&
+                    nameLower.includes("saint martin")
+                ) ||
+                (
+                    teamA.includes("bahamas") &&
+                    teamB.includes("saint martin")
+                ) ||
+                (
+                    teamB.includes("bahamas") &&
+                    teamA.includes("saint martin")
+                );
+
+            if (isBahamasSaintMartin) {
+                debugMatchFound = true;
+
+                console.log("");
+                console.log("================================");
+                console.log("DEBUG: BAHAMAS vs SAINT MARTIN FOUND");
+                console.log("================================");
+
+                console.log(
+                    "Event name:",
+                    event.eventName
+                );
+
+                console.log(
+                    "Team A:",
+                    event.teamAName
+                );
+
+                console.log(
+                    "Team B:",
+                    event.teamBName
+                );
+
+                console.log(
+                    "Date:",
+                    event.date
+                );
+
+                console.log(
+                    "Time:",
+                    event.time
+                );
+
+                console.log(
+                    "End date:",
+                    event.end_date
+                );
+
+                console.log(
+                    "End time:",
+                    event.end_time
+                );
+
+                console.log(
+                    "Visible:",
+                    event.visible
+                );
+
+                console.log(
+                    "Links:",
+                    event.links
+                );
+
+                console.log(
+                    "Extracted slug:",
+                    getSlug(event)
+                );
+
+                console.log(
+                    "Available Firebase keys containing Bahamas/Saint:",
+                    Object.keys(streamsData).filter(key =>
+                        key.toLowerCase().includes("bahamas") ||
+                        key.toLowerCase().includes("saint")
+                    )
+                );
+
+                console.log("================================");
+                console.log("");
+            }
 
             /*
              * Skip events explicitly marked invisible.
              */
             if (event.visible === false) {
                 skippedHidden++;
+
+                if (isBahamasSaintMartin) {
+                    console.log(
+                        "DEBUG RESULT: Bahamas vs Saint Martin was skipped because visible === false"
+                    );
+                }
+
                 continue;
             }
 
@@ -205,75 +368,192 @@ async function generateM3U() {
             const end = getEventEnd(event);
 
             /*
-             * If the event's date/time cannot be understood,
-             * do not put it into the playlist.
+             * Invalid date/time.
              */
             if (!start || !end) {
                 invalidEvents++;
 
                 console.log(
-                    `Invalid date/time: ${
-                        event.eventName || "Unknown Event"
-                    }`
+                    `Invalid date/time: ${eventName}`
                 );
+
+                if (isBahamasSaintMartin) {
+                    console.log(
+                        "DEBUG RESULT: Bahamas vs Saint Martin has invalid date/time."
+                    );
+                }
 
                 continue;
             }
 
             /*
+             * Show parsed dates for the target match.
+             */
+            if (isBahamasSaintMartin) {
+                console.log(
+                    "Parsed start:",
+                    start.toISOString()
+                );
+
+                console.log(
+                    "Parsed end:",
+                    end.toISOString()
+                );
+
+                console.log(
+                    "Current time:",
+                    now.toISOString()
+                );
+            }
+
+            /*
              * EVENT HAS ENDED
-             *
-             * This is the important stale-event check.
              */
             if (end <= now) {
                 expiredEvents++;
 
                 console.log(
-                    `Expired: ${
-                        event.eventName || "Unknown Event"
-                    }`
+                    `Expired: ${eventName}`
                 );
+
+                if (isBahamasSaintMartin) {
+                    console.log(
+                        "DEBUG RESULT: Bahamas vs Saint Martin was classified as EXPIRED."
+                    );
+
+                    console.log(
+                        `End ${end.toISOString()} <= Now ${now.toISOString()}`
+                    );
+                }
 
                 continue;
             }
 
             /*
              * EVENT IS TOO FAR IN THE FUTURE
-             *
-             * Events beginning more than 24 hours from now
-             * are not added yet.
              */
             if (start > upcomingLimit) {
                 futureEvents++;
 
                 console.log(
-                    `Too far ahead: ${
-                        event.eventName || "Unknown Event"
-                    }`
+                    `Too far ahead: ${eventName}`
                 );
+
+                if (isBahamasSaintMartin) {
+                    console.log(
+                        "DEBUG RESULT: Bahamas vs Saint Martin was classified as MORE THAN 24 HOURS AWAY."
+                    );
+                }
 
                 continue;
             }
 
             /*
-             * Find the matching stream database entry.
+             * Find matching stream database entry.
              */
             const slug = getSlug(event);
 
-            if (
-                !slug ||
-                !streamsData[slug] ||
-                !Array.isArray(streamsData[slug].streams)
-            ) {
+            if (!slug) {
                 missingStreams++;
 
                 console.log(
-                    `No stream data for: ${
-                        event.eventName || "Unknown Event"
-                    }`
+                    `No slug found for: ${eventName}`
                 );
 
+                console.log(
+                    "Links:",
+                    event.links
+                );
+
+                if (isBahamasSaintMartin) {
+                    console.log(
+                        "DEBUG RESULT: Bahamas vs Saint Martin has NO SLUG."
+                    );
+                }
+
                 continue;
+            }
+
+            if (!streamsData[slug]) {
+                missingStreams++;
+
+                console.log(
+                    `No Firebase entry for: ${eventName}`
+                );
+
+                console.log(
+                    "Slug:",
+                    slug
+                );
+
+                if (isBahamasSaintMartin) {
+                    console.log(
+                        "DEBUG RESULT: Bahamas vs Saint Martin slug does NOT exist in Firebase."
+                    );
+
+                    console.log(
+                        "Slug searched for:",
+                        slug
+                    );
+                }
+
+                continue;
+            }
+
+            if (!Array.isArray(streamsData[slug].streams)) {
+                missingStreams++;
+
+                console.log(
+                    `Firebase entry has no streams array for: ${eventName}`
+                );
+
+                console.log(
+                    "Slug:",
+                    slug
+                );
+
+                if (isBahamasSaintMartin) {
+                    console.log(
+                        "DEBUG RESULT: Bahamas vs Saint Martin Firebase entry exists, but streams is not an array."
+                    );
+
+                    console.log(
+                        "Firebase entry:",
+                        JSON.stringify(
+                            streamsData[slug],
+                            null,
+                            2
+                        )
+                    );
+                }
+
+                continue;
+            }
+
+            /*
+             * If we reached here, the target event passed
+             * every filtering step.
+             */
+            if (isBahamasSaintMartin) {
+                console.log("");
+                console.log("================================");
+                console.log(
+                    "DEBUG RESULT: BAHAMAS vs SAINT MARTIN PASSED ALL FILTERS"
+                );
+                console.log("================================");
+
+                console.log(
+                    "Firebase slug:",
+                    slug
+                );
+
+                console.log(
+                    "Number of streams:",
+                    streamsData[slug].streams.length
+                );
+
+                console.log("================================");
+                console.log("");
             }
 
             /*
@@ -282,23 +562,14 @@ async function generateM3U() {
             const category =
                 event.category || "Live Sports";
 
-            const eventName =
-                event.eventName || "Live Event";
-
-            const teamA =
-                event.teamAName || "";
-
-            const teamB =
-                event.teamBName || "";
-
             const logo =
                 event.eventLogo || "";
 
             let matchTitle = eventName;
 
-            if (teamA && teamB) {
+            if (event.teamAName && event.teamBName) {
                 matchTitle +=
-                    ` (${teamA} vs ${teamB})`;
+                    ` (${event.teamAName} vs ${event.teamBName})`;
             }
 
             const folderName =
@@ -308,6 +579,7 @@ async function generateM3U() {
              * Add every available stream for this event.
              */
             for (const stream of streamsData[slug].streams) {
+
                 if (!stream) {
                     continue;
                 }
@@ -333,18 +605,22 @@ async function generateM3U() {
                     !streamUrl ||
                     streamUrl === "https://no.link"
                 ) {
+                    if (isBahamasSaintMartin) {
+                        console.log(
+                            "DEBUG: Target match has an empty/placeholder stream URL."
+                        );
+                    }
+
                     continue;
                 }
 
                 /*
-                 * Normalize headers after the "|".
-                 *
-                 * Example:
-                 * https://example.com/stream.m3u8|user-agent=...
+                 * Normalize headers after "|".
                  */
                 let streamHeaders = "";
 
                 if (streamUrl.includes("|")) {
+
                     let [url, headers] =
                         streamUrl.split("|", 2);
 
@@ -382,8 +658,7 @@ async function generateM3U() {
                     `${escapeM3U(streamName)}${linkTag}\n`;
 
                 /*
-                 * Preserve the repository's existing
-                 * stream DRM metadata.
+                 * Preserve existing DRM metadata.
                  */
                 if (drmKey) {
                     m3u +=
@@ -405,14 +680,44 @@ async function generateM3U() {
                     `${streamUrl}\n\n`;
 
                 generatedStreams++;
+
+                if (isBahamasSaintMartin) {
+                    console.log(
+                        "DEBUG: Added target stream:",
+                        streamName
+                    );
+                }
             }
         }
 
         /*
+         * If the target match was never encountered at all,
+         * this tells us the API did not return it in the expected form.
+         */
+        if (!debugMatchFound) {
+            console.log("");
+            console.log("================================");
+            console.log(
+                "DEBUG RESULT: BAHAMAS vs SAINT MARTIN WAS NOT FOUND IN API RESPONSE"
+            );
+            console.log("================================");
+
+            console.log(
+                "The generator processed:",
+                totalEvents,
+                "events."
+            );
+
+            console.log(
+                "This means the event API response did not contain a recognizable Bahamas vs Saint Martin event."
+            );
+
+            console.log("================================");
+            console.log("");
+        }
+
+        /*
          * ALWAYS overwrite playlist.m3u.
-         *
-         * This guarantees that events removed by the API's
-         * current data do not remain from an older generated file.
          */
         fs.writeFileSync(
             "playlist.m3u",
@@ -426,7 +731,11 @@ async function generateM3U() {
         console.log("================================");
 
         console.log(
-            `Total API events: ${totalEvents}`
+            `Total valid API events processed: ${totalEvents}`
+        );
+
+        console.log(
+            `Invalid API items skipped: ${skippedInvalidItem}`
         );
 
         console.log(
@@ -464,11 +773,14 @@ async function generateM3U() {
         console.log("================================");
 
     } catch (error) {
+
         console.error("");
         console.error(
             "ERROR: Failed to generate M3U playlist."
         );
+
         console.error(error);
+
         console.error("");
 
         process.exit(1);
