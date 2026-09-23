@@ -301,6 +301,18 @@ async function generateM3U() {
             `Decoded ${firebaseIndex.length} Firebase keys for fallback matching.`
         );
 
+        console.log("");
+console.log("================================");
+console.log("ALL DECODED FIREBASE KEYS");
+console.log("================================");
+
+for (const entry of firebaseIndex) {
+    console.log(entry.decoded);
+}
+
+console.log("================================");
+console.log("");
+
         /*
          * Find a Firebase stream entry for an event.
          *
