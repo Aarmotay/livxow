@@ -20,6 +20,9 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Generate Main M3U
+        run: node generate.js
+      
       - name: Generate Toffee M3U
         run: node generate-toffee.js
 
