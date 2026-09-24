@@ -58,24 +58,3 @@ https://tmaxapp.site/8wirwjs76erftg/skysport3nz7X8xgv5.m3u8
 #KODIPROP:inputstream.adaptive.stream_headers=Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
 http://193.47.62.41/hls/dbbb.m3u8?|Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
 
-#EXTINF:-1 tvg-logo="https://i.ibb.co/jPLdK3bM/aewlogo24b.png" group-title="Boxing: AEW Dynamite (AEW vs AEW)",TSN SPORTS FHD [FHD]
-#KODIPROP:inputstream.adaptive.license_type=clearkey
-#KODIPROP:inputstream.adaptive.license_key=85b277daf5aae05833fe43a68f587968:d52d7e9bc0bcd98787efd547ac91eca0
-https://otte.cache.aiv-cdn.net/bom-nitro/live/clients/dash/enc/cjglydxghe/out/v1/8977baf175da4b94873194613dd3fe55/cenc.mpd
-
-#EXTINF:-1 tvg-logo="https://i.ibb.co/jPLdK3bM/aewlogo24b.png" group-title="Boxing: AEW Dynamite (AEW vs AEW)",AEW LIVE HD [HD]
-#KODIPROP:inputstream.adaptive.stream_headers=Referer=https://gooz.aapmains.net
-https://chatgpt.hereisman.net/playlist/49815/load-playlist?&.m3u8|Referer=https://gooz.aapmains.net
-
-#EXTINF:-1 tvg-logo="https://i.ibb.co/jPLdK3bM/aewlogo24b.png" group-title="Boxing: AEW Dynamite (AEW vs AEW)",FOX SPORTS FHD [FHD]
-#KODIPROP:inputstream.adaptive.license_type=clearkey
-#KODIPROP:inputstream.adaptive.license_key=9f327d24c66fbd84e15ab5c9ead7c7a4:83837185529c0c4048f81386c2d36426
-https://otte.cache.aiv-cdn.net/bom-nitro/live/dash/enc/fdx74zqzhu/out/v1/7d7a8c6981a842b98a683e9fbfe51d17/cenc.mpd
-
-#EXTINF:-1 tvg-logo="https://i.ibb.co/jPLdK3bM/aewlogo24b.png" group-title="Boxing: AEW Dynamite (AEW vs AEW)",SD SERVER [SD]
-#KODIPROP:inputstream.adaptive.stream_headers=Referer=http://www.fawanews.sc/
-http://193.47.62.193/hls/HHHH.m3u8|Referer=http://www.fawanews.sc/
-
-#EXTINF:-1 tvg-logo="http://api.sofascore.com/api/v1/unique-tournament/486/image/dark" group-title="Basketball: WNBA (Storm vs Wings)",Link 1 [HD]
-https://file.genoads.com/ch1.m3u8
-
