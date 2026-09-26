@@ -58,23 +58,3 @@ https://tmaxapp.site/8wirwjs76erftg/skysport3nz7X8xgv5.m3u8
 #KODIPROP:inputstream.adaptive.stream_headers=Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
 http://193.47.62.41/hls/dbbb.m3u8?|Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
 
-#EXTINF:-1 tvg-logo="https://www.wwe.com/f/styles/wwe_show_logo_l/public/all/2024/09/Smackdown_LOGO--c8e0b09904cb1356d309a8ea2acb0422.png" group-title="Boxing: Friday Night SmackDown (SmackDown vs SmackDown)",SMACK LIVE [FHD]
-https://raw.githubusercontent.com/athenapanda26/hls/refs/heads/main/smack.m3u8
-
-#EXTINF:-1 tvg-logo="https://www.wwe.com/f/styles/wwe_show_logo_l/public/all/2024/09/Smackdown_LOGO--c8e0b09904cb1356d309a8ea2acb0422.png" group-title="Boxing: Friday Night SmackDown (SmackDown vs SmackDown)",WWE HD [HD]
-#KODIPROP:inputstream.adaptive.stream_headers=Referer=https://gooz.aapmains.net
-https://chatgpt.hereisman.net/playlist/54963/load-playlist?&.m3u8|Referer=https://gooz.aapmains.net
-
-#EXTINF:-1 tvg-logo="https://www.wwe.com/f/styles/wwe_show_logo_l/public/all/2024/09/Smackdown_LOGO--c8e0b09904cb1356d309a8ea2acb0422.png" group-title="Boxing: Friday Night SmackDown (SmackDown vs SmackDown)",WWE LIVE HD [HD]
-https://ubuntu.fromthyheart.site/dailymotion/live/playlist/5.m3u8
-
-#EXTINF:-1 tvg-logo="https://www.wwe.com/f/styles/wwe_show_logo_l/public/all/2024/09/Smackdown_LOGO--c8e0b09904cb1356d309a8ea2acb0422.png" group-title="Boxing: Friday Night SmackDown (SmackDown vs SmackDown)",SD SERVER [SD]
-#KODIPROP:inputstream.adaptive.stream_headers=Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
-http://193.47.62.41/hls/UIIIAAA.m3u8?|Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
-
-#EXTINF:-1 tvg-logo="http://api.sofascore.com/api/v1/unique-tournament/11205/image/dark" group-title="Baseball: MLB (Athletics vs Astros)",Link 1 [HD]
-https://file.genoads.com/ch1.m3u8
-
-#EXTINF:-1 tvg-logo="http://api.sofascore.com/api/v1/unique-tournament/11208/image/dark" group-title="American football: CFL (BC vs Saskatchewan)",Link 1 [HD]
-https://file.genoads.com/ch1.m3u8
-
