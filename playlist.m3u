@@ -6,23 +6,89 @@ https://raw.githubusercontent.com/aiorbd-video/video/refs/heads/main/test1/outpu
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" group-title="📢 SOCIAL MEDIA", 🌐 JOIN FACEBOOK GROUP
 https://raw.githubusercontent.com/aiorbd-video/video/refs/heads/main/Allinonesocialvid/output.m3u8
 
-#EXTINF:-1 tvg-logo="https://i.ibb.co/jPLdK3bM/aewlogo24b.png" group-title="Boxing: AEW Dynamite (AEW vs AEW)",TSN SPORTS FHD [FHD]
+#EXTINF:-1 tvg-logo="https://cdn-icons-png.flaticon.com/512/2418/2418779.png" group-title="Motorsport: Formula 1 (Formula 1 vs Formula 1)",APPLE TV FHD [FHD]
 #KODIPROP:inputstream.adaptive.license_type=clearkey
-#KODIPROP:inputstream.adaptive.license_key=85b277daf5aae05833fe43a68f587968:d52d7e9bc0bcd98787efd547ac91eca0
-https://otte.cache.aiv-cdn.net/bom-nitro/live/clients/dash/enc/cjglydxghe/out/v1/8977baf175da4b94873194613dd3fe55/cenc.mpd
+#KODIPROP:inputstream.adaptive.license_key=c0a9d1e7eaf683120499b4017314a518:990018b9907cf9b5ae4c3dd9eb948255
+#KODIPROP:inputstream.adaptive.stream_headers=User-Agent=Mozilla/5.0
+https://otte.cache.aiv-cdn.net/bom-nitro/live/clients/dash/enc/bloqv62cg8/out/v1/0f6b2626aef2496e97bce1b5998b49b5/cenc.mpd|User-Agent=Mozilla/5.0
 
-#EXTINF:-1 tvg-logo="https://i.ibb.co/jPLdK3bM/aewlogo24b.png" group-title="Boxing: AEW Dynamite (AEW vs AEW)",AEW LIVE HD [HD]
+#EXTINF:-1 tvg-logo="https://cdn-icons-png.flaticon.com/512/2418/2418779.png" group-title="Motorsport: Formula 1 (Formula 1 vs Formula 1)",TSN SPORTS FHD [FHD]
+#KODIPROP:inputstream.adaptive.license_type=clearkey
+#KODIPROP:inputstream.adaptive.license_key=14eeabf30c14b7fbf3008c03099ce011:17d2ac8dbc5429bd70af3433aa12158d
+#KODIPROP:inputstream.adaptive.stream_headers=User-Agent=Mozilla/5.0
+https://otte.cache.aiv-cdn.net/bom-nitro/live/clients/dash/enc/w0rehjjrwe/out/v1/69a2a7041395406b970598f61680e7cf/cenc.mpd|User-Agent=Mozilla/5.0
+
+#EXTINF:-1 tvg-logo="https://cdn-icons-png.flaticon.com/512/2418/2418779.png" group-title="Motorsport: Formula 1 (Formula 1 vs Formula 1)",Sky Via APPLE TV [FHD]
+#KODIPROP:inputstream.adaptive.license_type=clearkey
+#KODIPROP:inputstream.adaptive.license_key=6dd170459b9d19e43bc554e783570a2b:1a86def14df85af755c5f26d7457fcea
+#KODIPROP:inputstream.adaptive.stream_headers=User-Agent=Mozilla/5.0
+https://otte.cache.aiv-cdn.net/bom-nitro/live/clients/dash/enc/bloqv62cg8/out/v1/0f6b2626aef2496e97bce1b5998b49b5/cenc.mpd|User-Agent=Mozilla/5.0
+
+#EXTINF:-1 tvg-logo="https://cdn-icons-png.flaticon.com/512/2418/2418779.png" group-title="Motorsport: Formula 1 (Formula 1 vs Formula 1)",FANCODE FHD [FHD]
+#KODIPROP:inputstream.adaptive.license_type=clearkey
+#KODIPROP:inputstream.adaptive.license_key=1994b1df7dfd2e8a8d7b9bf3fb900285:22a1444b3da18e139191665b3d652835
+#KODIPROP:inputstream.adaptive.stream_headers=User-Agent=Mozilla/5.0
+https://otte.cache.aiv-cdn.net/bom-nitro/live/clients/dash/enc/avqlywnuzx/out/v1/aefca6420f944a9482e117f315de535f/cenc.mpd?|User-Agent=Mozilla/5.0
+
+#EXTINF:-1 tvg-logo="https://cdn-icons-png.flaticon.com/512/2418/2418779.png" group-title="Motorsport: Formula 1 (Formula 1 vs Formula 1)",SPORTSCAST FHD [FHD]
+https://live.kinescopecdn.net/on-air/5bf2c07e-3604-42cf-959a-67ed8914ffd5/5f80538f-a945-4227-804f-a9c2743c0e3b/master.m3u8
+
+#EXTINF:-1 tvg-logo="https://cdn-icons-png.flaticon.com/512/2418/2418779.png" group-title="Motorsport: Formula 1 (Formula 1 vs Formula 1)",APPLE TV 4K [FHD]
+#KODIPROP:inputstream.adaptive.license_type=clearkey
+#KODIPROP:inputstream.adaptive.license_key=6e78c43952d3b415ff4e0d3ef4946347:250cfc6c4e1e0fc070298c9a8ce14830
+#KODIPROP:inputstream.adaptive.stream_headers=User-Agent=Mozilla/5.0
+https://otte.cache.aiv-cdn.net/pdx-nitro/live/clients/dash/enc/eihx5jcvpx/out/v1/02b3c045272c49b890e8074af2daf11b/cenc.mpd|User-Agent=Mozilla/5.0
+
+#EXTINF:-1 tvg-logo="https://cdn-icons-png.flaticon.com/512/2418/2418779.png" group-title="Motorsport: Formula 1 (Formula 1 vs Formula 1)",Formula 1 HD [HD]
 #KODIPROP:inputstream.adaptive.stream_headers=Referer=https://gooz.aapmains.net
-https://chatgpt.hereisman.net/playlist/49815/load-playlist?&.m3u8|Referer=https://gooz.aapmains.net
+https://chatgpt.hereisman.net/playlist/54937/load-playlist?&.m3u8|Referer=https://gooz.aapmains.net
 
-#EXTINF:-1 tvg-logo="https://i.ibb.co/jPLdK3bM/aewlogo24b.png" group-title="Boxing: AEW Dynamite (AEW vs AEW)",FOX SPORTS FHD [FHD]
+#EXTINF:-1 tvg-logo="https://cdn-icons-png.flaticon.com/512/2418/2418779.png" group-title="Motorsport: Formula 1 (Formula 1 vs Formula 1)",RUSSIA FEED FHD [FHD]
+#KODIPROP:inputstream.adaptive.stream_headers=User-Agent=Mozilla
+https://bl.rutube.ru/livestream/1aa1b89b83ff1ad25bb7471300fb4a3f/index.m3u8?s=NO7FH5RK4GCPWdt1vM66uQ&e=1787394379&scheme=https|User-Agent=Mozilla
+
+#EXTINF:-1 tvg-logo="https://cdn-icons-png.flaticon.com/512/2418/2418779.png" group-title="Motorsport: Formula 1 (Formula 1 vs Formula 1)",SKY SPORTS HD [HD]
+#KODIPROP:inputstream.adaptive.stream_headers=Referer=https://streamscenter.online/&Origin=https://streamscenter.online
+https://edgestream3.pro/hls/hbfkazbkaznc49.m3u8?|Referer=https://streamscenter.online/&Origin=https://streamscenter.online
+
+#EXTINF:-1 tvg-logo="https://cdn-icons-png.flaticon.com/512/2418/2418779.png" group-title="Motorsport: Formula 1 (Formula 1 vs Formula 1)",SKY SPORT NZ [HD]
+https://tmaxapp.site/8wirwjs76erftg/skysport3nz7X8xgv5.m3u8
+
+#EXTINF:-1 tvg-logo="https://cdn-icons-png.flaticon.com/512/2418/2418779.png" group-title="Motorsport: Formula 1 (Formula 1 vs Formula 1)",LOW SERVER [LOW]
+#KODIPROP:inputstream.adaptive.stream_headers=Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
+http://193.47.62.41/hls/dbbb.m3u8?|Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
+
+#EXTINF:-1 tvg-logo="https://i.ibb.co/6chYXnTd/mgpp.png" group-title="Motorsport: MotoGP (MotoGP vs MotoGP)",TNT SPORTS FHD [FHD]
 #KODIPROP:inputstream.adaptive.license_type=clearkey
-#KODIPROP:inputstream.adaptive.license_key=9f327d24c66fbd84e15ab5c9ead7c7a4:83837185529c0c4048f81386c2d36426
-https://otte.cache.aiv-cdn.net/bom-nitro/live/dash/enc/fdx74zqzhu/out/v1/7d7a8c6981a842b98a683e9fbfe51d17/cenc.mpd
+#KODIPROP:inputstream.adaptive.license_key=f3df7843080ae743bf865dc5fdf64c68:567c863bc12eb74788ea74888c042e1b
+#KODIPROP:inputstream.adaptive.stream_headers=User-Agent=Mozilla/5.0
+https://otte.cache.aiv-cdn.net/bom-nitro/live/clients/dash/enc/puehlftk5j/out/v1/f7f0da1ee112481ca0024e6d4dd97f4a/cenc.mpd|User-Agent=Mozilla/5.0
 
-#EXTINF:-1 tvg-logo="https://i.ibb.co/jPLdK3bM/aewlogo24b.png" group-title="Boxing: AEW Dynamite (AEW vs AEW)",SD SERVER [SD]
-#KODIPROP:inputstream.adaptive.stream_headers=Referer=http://www.fawanews.sc/
-http://193.47.62.193/hls/HHHH.m3u8|Referer=http://www.fawanews.sc/
+#EXTINF:-1 tvg-logo="https://i.ibb.co/6chYXnTd/mgpp.png" group-title="Motorsport: MotoGP (MotoGP vs MotoGP)",SPO TV FHD [FHD]
+#KODIPROP:inputstream.adaptive.license_type=clearkey
+#KODIPROP:inputstream.adaptive.license_key=7eea72d6075245a99ee3255603d58853:6848ef60575579bf4d415db1032153ed
+https://qp-pldt-live-grp-13-prod.akamaized.net/out/u/dr_spotv2hd.mpd
+
+#EXTINF:-1 tvg-logo="https://i.ibb.co/6chYXnTd/mgpp.png" group-title="Motorsport: MotoGP (MotoGP vs MotoGP)",MotoGP FHD [FHD]
+#KODIPROP:inputstream.adaptive.license_type=clearkey
+#KODIPROP:inputstream.adaptive.license_key=e03f302ec4dabcccca82cc9f76731ec9:53ea1027d2bf2893a552cf15bc0366de
+#KODIPROP:inputstream.adaptive.stream_headers=User-Agent=Mozilla/5.0
+https://otte.cache.aiv-cdn.net/bom-nitro/live/clients/dash/enc/wjeweupwyc/out/v1/8197c8e055c94a868623653ac55c10bf/cenc.mpd|User-Agent=Mozilla/5.0
+
+#EXTINF:-1 tvg-logo="https://i.ibb.co/6chYXnTd/mgpp.png" group-title="Motorsport: MotoGP (MotoGP vs MotoGP)",TNT SPORTS HD [HD]
+https://tmaxapp.site/8wirwjs76erftg/tntsports2.m3u8
+
+#EXTINF:-1 tvg-logo="https://i.ibb.co/6chYXnTd/mgpp.png" group-title="Motorsport: MotoGP (MotoGP vs MotoGP)",SPORT TV HD [HD]
+#KODIPROP:inputstream.adaptive.stream_headers=Referer=https://foottime.top/
+https://t7.ultrastream.vip/sporttv4/index.m3u8?|Referer=https://foottime.top/
+
+#EXTINF:-1 tvg-logo="https://i.ibb.co/6chYXnTd/mgpp.png" group-title="Motorsport: MotoGP (MotoGP vs MotoGP)",HD SERVER [HD]
+#KODIPROP:inputstream.adaptive.stream_headers=Referer=https://streamscenter.online/&Origin=https://streamscenter.online
+https://edgestream1.pro/hls/hbfkazbkaznc49.m3u8?|Referer=https://streamscenter.online/&Origin=https://streamscenter.online
+
+#EXTINF:-1 tvg-logo="https://i.ibb.co/6chYXnTd/mgpp.png" group-title="Motorsport: MotoGP (MotoGP vs MotoGP)",LOW SERVER [LOW]
+#KODIPROP:inputstream.adaptive.stream_headers=Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
+http://193.47.62.194/hls/AVVVV.m3u8?|Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
 
 #EXTINF:-1 tvg-logo="http://api.sofascore.com/api/v1/unique-tournament/11158/image/dark" group-title="Cricket: Asian Games (IND vs SL)",WILLOW FHD [FHD]
 #KODIPROP:inputstream.adaptive.license_type=clearkey
