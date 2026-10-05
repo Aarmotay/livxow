@@ -6,3 +6,19 @@ https://raw.githubusercontent.com/aiorbd-video/video/refs/heads/main/test1/outpu
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" group-title="📢 SOCIAL MEDIA", 🌐 JOIN FACEBOOK GROUP
 https://raw.githubusercontent.com/aiorbd-video/video/refs/heads/main/Allinonesocialvid/output.m3u8
 
+#EXTINF:-1 tvg-logo="https://i.ibb.co/4R6j8XK0/WWE-Logo-svg.png" group-title="Boxing: Monday Night RAW (WWE RAW vs WWE RAW)",WWE+ HD [HD]
+#KODIPROP:inputstream.adaptive.stream_headers=Referer=https://streamscenter.online/&Origin=https://streamscenter.online
+https://edgestream2.pro/hls/zeuryuegn48.m3u8?|Referer=https://streamscenter.online/&Origin=https://streamscenter.online
+
+#EXTINF:-1 tvg-logo="https://i.ibb.co/4R6j8XK0/WWE-Logo-svg.png" group-title="Boxing: Monday Night RAW (WWE RAW vs WWE RAW)",WWE HD [HD]
+#KODIPROP:inputstream.adaptive.stream_headers=Referer=https://gooz.aapmains.net
+https://chatgpt.hereisman.net/playlist/54451/load-playlist?&.m3u8|Referer=https://gooz.aapmains.net
+
+#EXTINF:-1 tvg-logo="https://i.ibb.co/4R6j8XK0/WWE-Logo-svg.png" group-title="Boxing: Monday Night RAW (WWE RAW vs WWE RAW)",ATL SERVER [HD]
+#KODIPROP:inputstream.adaptive.stream_headers=User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0&Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
+http://193.47.62.58/hls/XAXAXA.m3u8|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0&Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
+
+#EXTINF:-1 tvg-logo="https://i.ibb.co/4R6j8XK0/WWE-Logo-svg.png" group-title="Boxing: Monday Night RAW (WWE RAW vs WWE RAW)",SD SERVER [SD]
+#KODIPROP:inputstream.adaptive.stream_headers=Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
+http://193.47.62.47/hls/XAXAXA.m3u8?|Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
+
