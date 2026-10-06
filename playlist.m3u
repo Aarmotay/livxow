@@ -22,3 +22,10 @@ http://193.47.62.58/hls/XAXAXA.m3u8|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win
 #KODIPROP:inputstream.adaptive.stream_headers=Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
 http://193.47.62.47/hls/XAXAXA.m3u8?|Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
 
+#EXTINF:-1 tvg-logo="https://i.ibb.co/4R6j8XK0/WWE-Logo-svg.png" group-title="Boxing: WWE NXT (WWE NXT vs WWE NXT)",WWE NXT HD [HD]
+https://ubuntu.fromthyheart.site/dailymotion/live/playlist/5.m3u8
+
+#EXTINF:-1 tvg-logo="https://i.ibb.co/4R6j8XK0/WWE-Logo-svg.png" group-title="Boxing: WWE NXT (WWE NXT vs WWE NXT)",SD SERVER [SD]
+#KODIPROP:inputstream.adaptive.stream_headers=Referer=http://www.fawanews.sc/
+http://193.47.62.192/hls/AFFFFXAAAAA.m3u8|Referer=http://www.fawanews.sc/
+
