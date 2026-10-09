@@ -58,38 +58,6 @@ https://tmaxapp.site/8wirwjs76erftg/skysport3nz7X8xgv5.m3u8
 #KODIPROP:inputstream.adaptive.stream_headers=Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
 http://193.47.62.41/hls/dbbb.m3u8?|Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
 
-#EXTINF:-1 tvg-logo="https://i.ibb.co/6chYXnTd/mgpp.png" group-title="Motorsport: MotoGP (MotoGP vs MotoGP)",TNT SPORTS FHD [FHD]
-#KODIPROP:inputstream.adaptive.license_type=clearkey
-#KODIPROP:inputstream.adaptive.license_key=f3df7843080ae743bf865dc5fdf64c68:567c863bc12eb74788ea74888c042e1b
-#KODIPROP:inputstream.adaptive.stream_headers=User-Agent=Mozilla/5.0
-https://otte.cache.aiv-cdn.net/bom-nitro/live/clients/dash/enc/puehlftk5j/out/v1/f7f0da1ee112481ca0024e6d4dd97f4a/cenc.mpd|User-Agent=Mozilla/5.0
-
-#EXTINF:-1 tvg-logo="https://i.ibb.co/6chYXnTd/mgpp.png" group-title="Motorsport: MotoGP (MotoGP vs MotoGP)",SPO TV FHD [FHD]
-#KODIPROP:inputstream.adaptive.license_type=clearkey
-#KODIPROP:inputstream.adaptive.license_key=7eea72d6075245a99ee3255603d58853:6848ef60575579bf4d415db1032153ed
-https://qp-pldt-live-grp-13-prod.akamaized.net/out/u/dr_spotv2hd.mpd
-
-#EXTINF:-1 tvg-logo="https://i.ibb.co/6chYXnTd/mgpp.png" group-title="Motorsport: MotoGP (MotoGP vs MotoGP)",MotoGP FHD [FHD]
-#KODIPROP:inputstream.adaptive.license_type=clearkey
-#KODIPROP:inputstream.adaptive.license_key=e03f302ec4dabcccca82cc9f76731ec9:53ea1027d2bf2893a552cf15bc0366de
-#KODIPROP:inputstream.adaptive.stream_headers=User-Agent=Mozilla/5.0
-https://otte.cache.aiv-cdn.net/bom-nitro/live/clients/dash/enc/wjeweupwyc/out/v1/8197c8e055c94a868623653ac55c10bf/cenc.mpd|User-Agent=Mozilla/5.0
-
-#EXTINF:-1 tvg-logo="https://i.ibb.co/6chYXnTd/mgpp.png" group-title="Motorsport: MotoGP (MotoGP vs MotoGP)",TNT SPORTS HD [HD]
-https://tmaxapp.site/8wirwjs76erftg/tntsports2.m3u8
-
-#EXTINF:-1 tvg-logo="https://i.ibb.co/6chYXnTd/mgpp.png" group-title="Motorsport: MotoGP (MotoGP vs MotoGP)",SPORT TV HD [HD]
-#KODIPROP:inputstream.adaptive.stream_headers=Referer=https://foottime.top/
-https://t7.ultrastream.vip/sporttv4/index.m3u8?|Referer=https://foottime.top/
-
-#EXTINF:-1 tvg-logo="https://i.ibb.co/6chYXnTd/mgpp.png" group-title="Motorsport: MotoGP (MotoGP vs MotoGP)",HD SERVER [HD]
-#KODIPROP:inputstream.adaptive.stream_headers=Referer=https://streamscenter.online/&Origin=https://streamscenter.online
-https://edgestream1.pro/hls/hbfkazbkaznc49.m3u8?|Referer=https://streamscenter.online/&Origin=https://streamscenter.online
-
-#EXTINF:-1 tvg-logo="https://i.ibb.co/6chYXnTd/mgpp.png" group-title="Motorsport: MotoGP (MotoGP vs MotoGP)",LOW SERVER [LOW]
-#KODIPROP:inputstream.adaptive.stream_headers=Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
-http://193.47.62.194/hls/AVVVV.m3u8?|Referer=http://www.fawanews.sc/&Origin=http://www.fawanews.sc/
-
 #EXTINF:-1 tvg-logo="https://iili.io/FDjaT1R.md.png" group-title="Boxing: One Friday Fights (One Friday Fights vs One Friday Fights)",One Fight FHD [FHD]
 #KODIPROP:inputstream.adaptive.license_type=clearkey
 #KODIPROP:inputstream.adaptive.license_key=308006101c8fd0262c0f529319b9c127:37683aadc75b1450efa82d62c647984d
