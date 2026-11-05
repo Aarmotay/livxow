@@ -151,18 +151,20 @@ https://cdn1.logichost.in/ajmantv/live/playlist.m3u8
 https://tvsen5.aynaott.com/willowhd/index.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/KjFtKb0Q/channels4-profile-(6).jpg" group-title="sports",A Sports HD
 https://tvsen6.aynaott.com/zv68oqPDu7MZZwmHhRxt/tracks-v1a1/mono.ts.m3u8
+#EXTINF:-1 tvg-logo="https://i.postimg.cc/R0vznnym/images-(1)-(30).jpg" group-title="sports",Star Sports 2 HD
+http://tvsen7.aynascope.net/ssport2hd/index.m3u8
+#EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/songwenhui239/Songwenhui239/refs/heads/main/PK%20Sports.jpeg" group-title="sports",PK Sports
+https://lbgo.bozztv.com/ssh101/ssh101/pksportshd/playlist.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/xCbvKCQx/Sony-Sports-Ten-1.webp" group-title="sports",Sony Ten 1
 https://drk6xq0vhn.gpcdn.net/live/ten_1_hd_720/index.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/L8kTW1yj/images-(1)-(10).jpg" group-title="sports",Sony Ten 2
 https://drk6xq0vhn.gpcdn.net/live/ten_2_hd_720/index.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/cJrcLbx3/7d0d368840908947f0e3bb344c29c53f.png" group-title="sports",Sony Ten 5
 https://drk6xq0vhn.gpcdn.net/live/ten_5_hd_720/index.m3u8
-#EXTINF:-1 tvg-logo="https://i.postimg.cc/R0vznnym/images-(1)-(30).jpg" group-title="sports",Star Sports 2 HD
-http://tvsen7.aynascope.net/ssport2hd/index.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/ZRgG8Gc8/images-(1)-(2).png" group-title="sports",Euro Sports HD
 https://drk6xq0vhn.gpcdn.net/live/euro_sports_hd_abr/index.m3u8
-#EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/songwenhui239/Songwenhui239/refs/heads/main/PK%20Sports.jpeg" group-title="sports",PK Sports
-https://lbgo.bozztv.com/ssh101/ssh101/pksportshd/playlist.m3u8
+#EXTINF:-1 tvg-logo="https://i.postimg.cc/rpQVCrfw/images-(1)-(3).png" group-title="sports",Euro Sports 2
+https://s7.iptv-24.net/1452/playlist.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/SQfZPMzq/images-(1)-(28).jpg" group-title="sports",Cricket Gold HD
 https://streams2.sofast.tv/scheduler/scheduleMaster/418.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/RFKWRJ88/images-(11).jpg" group-title="sports",DD Sports
@@ -179,14 +181,18 @@ http://85.237.89.160:9590/usa-s/ESPN-HD/index.m3u8
 http://85.237.89.160:9590/usa-s/ESPN-2-HD/index.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/zDFx8CnK/images-(1)-(4).png" group-title="sports",Kabadi 24/7
 https://samitaorigin.tangotv.in/KABADDI24X7/SAMITAORIGIN/index.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/TNT_Sports_2021_logo.svg/960px-TNT_Sports_2021_logo.svg.png" group-title="sports",TNT Sports
+http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/86.m3u8
+#EXTINF:-1 tvg-logo="https://jiotvimages.cdn.jio.com/dare_images/images/Red_Bull_TV.png" group-title="sports",Red Bool TV
+https://3ea22335.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWdiX1JlZEJ1bGxUVl9ITFM/playlist.m3u8
+#EXTINF:-1 tvg-logo="https://i.imgur.com/EuPvzJe.png" group-title="sports",Band Sports
+http://45.162.64.114/BAND_SPORTS/index.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/9QYgTGv7/images-(9).png" group-title="news",AL Jazeera HD
 https://live-hls-apps-aje-fa.getaj.net/AJE/index.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/vmBSMJCF/Goldmines-Bollywood.webp" group-title="movies",Goldmines Bollywood
 https://mumt03.tangotv.in/Dsly5z3HGOLDMINESBOLLYWOOD/index.m3u8
 #EXTINF:-1 tvg-logo="https://jiotvimages.cdn.jio.com/dare_images/images/B4U_Kadak.png" group-title="movies",B4U Kadak
 https://streams.tangotv.in/B4UKADAK/ORIGIN/index.m3u8
-#EXTINF:-1 tvg-logo="https://tvpnlogopus.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/IN38000072R_20260325T012318SQUARE.png" group-title="movies",The Movie Club
-https://tvpnlogopus.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/IN38000072R_20260325T012318SQUARE.png
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/k49yTcmN/COLOURBOX3788501.jpg" group-title="movies",Gold Star
 https://moviethls.wns.live/hls/stream.m3u8
 #EXTINF:-1 tvg-logo="https://dtil.tmsimg.com/assets/GNLZZGG0032BWBW.png?lock=720x540" group-title="music",Epic Music
