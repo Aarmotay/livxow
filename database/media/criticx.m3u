@@ -105,8 +105,6 @@ https://streams.tangotv.in/GOLDMINEMOVIES/ORIGIN/index.m3u8
 https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg00864-shemarooenterta-shemabollywood-ono/playlist.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/25X7tHpc/value-(1).png" group-title="movies",Hollywood Action Movies
 https://amg01076-lightningintern-actionhollywood-samsungnz-82rry.amagi.tv/playlist/amg01076-lightningintern-actionhollywood-samsungnz/playlist.m3u8
-#EXTINF:-1 tvg-logo="https://i.postimg.cc/X7JLgrqC/images-(30).png" group-title="movies",HBO Hits  HD
-http://tvsen7.aynascope.net/hbo2/index.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/Y0nKWvfF/images-(2)-(3).jpg" group-title="music",Zoom Music
 https://pubads.g.doubleclick.net/ssai/event/JCAm25qkRXiKcK1AJMlvKQ/master.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/7Z499545/images-(28).jpg" group-title="music",8XM HD
@@ -161,8 +159,10 @@ https://tvsen7.aynaott.com/rEBp38Ax/index.m3u8
 https://tvsen6.aynaott.com/zv68oqPDu7MZZwmHhRxt/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 tvg-logo="https://msports.pk/wp-content/uploads/2026/02/m-sports-300.png" group-title="sports",M Sports HD
 https://cdn.rabta.stream/M-Sports/index.m3u8
-#EXTINF:-1 tvg-logo="https://i.postimg.cc/ZRgG8Gc8/images-(1)-(2).png" group-title="sports",Euro Sports HD
+#EXTINF:-1 tvg-logo="https://i.postimg.cc/P52F9VbT/eurosport-logo-png-seeklogo-407861.png" group-title="sports",Euro Sports HD
 http://103.253.74.210:7070/stream/122/index.m3u8
+#EXTINF:-1 tvg-logo="https://i.imgur.com/olQJgm7.png" group-title="sports",Eurosport 1
+https://s7.iptv-24.net/1439/playlist.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/rpQVCrfw/images-(1)-(3).png" group-title="sports",Euro Sports 2
 https://s7.iptv-24.net/1452/playlist.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/SQfZPMzq/images-(1)-(28).jpg" group-title="sports",Cricket Gold HD
