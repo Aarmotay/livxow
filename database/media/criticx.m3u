@@ -153,6 +153,8 @@ http://170.83.16.50/HISTORY/index.m3u8
 https://cdn1.logichost.in/ajmantv/live/playlist.m3u8
 #EXTINF:-1 tvg-logo="https://i.imgur.com/ICEeVuk.png" group-title="Discover",TLC HD
 https://drk6xq0vhn.gpcdn.net/live/tlc_sd_abr/index.m3u8
+#EXTINF:-1 tvg-logo="n" group-title="entertainment",Shakti TV
+https://mumbai-edge.smartplaytv.in/ShakthiTV/index.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/wBXSLhLr/images-(1)-(27).jpg" group-title="sports",Willow Sports
 https://tvsen7.aynaott.com/rEBp38Ax/index.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/KjFtKb0Q/channels4-profile-(6).jpg" group-title="sports",A Sports HD
@@ -203,3 +205,5 @@ https://g4wlkwx8l23a-hls-live.5centscdn.com/HUM/271ddf829afeece44d8732757fba1a66
 https://raw.githubusercontent.com/amazeyourself/adaptive-streams/refs/heads/main/streams/gb/YuppTV/UtsavBharat.m3u8
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/9FD8Tt7Q/images-(1)-(7).jpg" group-title="entertainment",Star Plus HD
 https://d1rc86nwwc9fag.cloudfront.net/260723/starplusuk_2500/chunks.m3u8
+#EXTINF:-1 tvg-logo="g" group-title="g",test
+http://116.90.120.149:8000/play/a021/index.m3u8
