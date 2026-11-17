@@ -6,6 +6,10 @@ https://raw.githubusercontent.com/aiorbd-video/video/refs/heads/main/test1/outpu
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" group-title="📢 SOCIAL MEDIA", 🌐 JOIN FACEBOOK GROUP
 https://raw.githubusercontent.com/aiorbd-video/video/refs/heads/main/Allinonesocialvid/output.m3u8
 
-#EXTINF:-1 tvg-logo="https://img.sofascore.com/api/v1/unique-tournament/30714/image/dark" group-title="Cricket: Womens Emerging Nations Trophy (UAE-W vs SL-W)",Link 1 [HD]
-https://file.genoads.com/ch1.m3u8
+#EXTINF:-1 tvg-logo="https://i.ibb.co/4R6j8XK0/WWE-Logo-svg.png" group-title="Boxing: WWE NXT (WWE NXT vs WWE NXT)",WWE NXT HD [HD]
+https://ubuntu.fromthyheart.site/dailymotion/live/playlist/5.m3u8
+
+#EXTINF:-1 tvg-logo="https://i.ibb.co/4R6j8XK0/WWE-Logo-svg.png" group-title="Boxing: WWE NXT (WWE NXT vs WWE NXT)",SD SERVER [SD]
+#KODIPROP:inputstream.adaptive.stream_headers=Referer=http://www.fawanews.sc/
+http://193.47.62.192/hls/AFFFFXAAAAA.m3u8|Referer=http://www.fawanews.sc/
 
